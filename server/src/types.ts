@@ -48,3 +48,12 @@ export class UserResponse {
   @Field(() => User, { nullable: true })
   user?: User
 }
+
+@InputType()
+export class Credential {
+  @Field(() => String)
+  usernameOrEmail: string
+
+  @Field(() => String)
+  password: string
+}

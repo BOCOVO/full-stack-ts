@@ -1,6 +1,6 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../entities/User";
-import {UserInput, UserResponse } from "../types";
+import { Credential, UserInput, UserResponse } from "../types";
 import argon2 from "argon2"
 import uniqueDBError from "../utils/uniqueDBError";
 import userValidator from "../utils/userValidator";
@@ -38,6 +38,39 @@ export class userResolver {
         }
       }
     }
+  }
+
+  @Query(() => UserResponse)
+  async login(
+    @Arg("credential") credential: Credential
+  ): Promise<UserResponse | void> {
+    const user = await User.findOne(
+      credential.usernameOrEmail.includes("@")
+        ? { where: { email: credential.usernameOrEmail } }
+        : { where: { username: credential.usernameOrEmail } }
+    );
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "usernameOrEmail",
+            message: "user not found"
+          }
+        ]
+      }
+    }
+    const correctPass = await argon2.verify(user.password, credential.password)
+    if (!correctPass) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "incorrect password or usernameOrEmail"
+          }
+        ]
+      }
+    }
+    return {user}
   }
 
   @Query(() => User, { nullable: true })
