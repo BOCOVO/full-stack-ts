@@ -3,9 +3,11 @@ import express from "express";
 import cors from "cors";
 import { ApolloServer } from "apollo-server-express";
 
-import { openDBConnection } from "./utils/database";
+process.env.NODE_ENV = "development";
+
 import config from "./constants";
 import { createSchema } from "./utils/createSchema";
+import AppDataSource from "./datasource";
 
 const main = async () => {
   let retries = Number(config.dbConnectionRetries);
@@ -13,9 +15,10 @@ const main = async () => {
 
   while (retries) {
     try {
-      const conn = await openDBConnection();
+      const conn = await AppDataSource.initialize()
       await conn.synchronize();
       await conn.runMigrations();
+      console.log("Data Source has been initialized!")
       break;
     } catch (error) {
       retries -= 1;
@@ -33,7 +36,7 @@ const main = async () => {
   );
 
   const apolloServer = new ApolloServer({
-    schema: await createSchema(),
+    schema: await createSchema()
   });
 
   await apolloServer.start();
