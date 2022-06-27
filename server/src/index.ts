@@ -9,6 +9,12 @@ import config from "./constants";
 import { createSchema } from "./utils/createSchema";
 import AppDataSource from "./datasource";
 
+import { createClient } from "redis"
+import expressSession from "express-session"
+import RedisStore from "connect-redis"
+import constants from "./constants";
+import { ApolloContext } from "./types";
+
 const main = async () => {
   let retries = Number(config.dbConnectionRetries);
   const retryTimeout = Number(config.timeoutBeforeRetry);
@@ -35,8 +41,27 @@ const main = async () => {
     cors({ origin: [config.frontend_url, config.studio_apollo_graphql_url] })
   );
 
+  // setting session
+  const redisClient = createClient({ legacyMode: true })
+  redisClient.connect().catch(err => console.log("Redis connection error: ",err))
+  const sessionStore = new (RedisStore(expressSession))({ client: redisClient })
+  app.use(expressSession({
+    name: "qid",
+    store: sessionStore,
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 30, // a month
+      httpOnly: true,
+      sameSite: "lax",
+      secure: constants.__prod__
+    }
+  }))
+
   const apolloServer = new ApolloServer({
-    schema: await createSchema()
+    schema: await createSchema(),
+    context: ({ req, res }): ApolloContext => ({ req, res })
   });
 
   await apolloServer.start();

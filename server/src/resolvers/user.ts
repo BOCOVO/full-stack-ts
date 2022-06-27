@@ -1,10 +1,9 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../entities/User";
-import { Credential, UserInput, UserResponse } from "../types";
+import { ApolloContext, Credential, UserInput, UserResponse } from "../types";
 import argon2 from "argon2"
 import uniqueDBError from "../utils/uniqueDBError";
 import userValidator from "../utils/userValidator";
-
 @Resolver()
 export class userResolver {
 
@@ -42,7 +41,8 @@ export class userResolver {
 
   @Query(() => UserResponse)
   async login(
-    @Arg("credential") credential: Credential
+    @Arg("credential") credential: Credential,
+    @Ctx() {req}:ApolloContext
   ): Promise<UserResponse | void> {
     const user = await User.findOne(
       credential.usernameOrEmail.includes("@")
@@ -70,6 +70,7 @@ export class userResolver {
         ]
       }
     }
+    req.session.userId = user.id
     return {user}
   }
 

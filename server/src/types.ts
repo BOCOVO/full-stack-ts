@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { InputType, Field, ObjectType } from "type-graphql";
 import { User } from "./entities/User";
 
@@ -56,4 +57,17 @@ export class Credential {
 
   @Field(() => String)
   password: string
+}
+interface Session {
+  userId:string
+}
+
+export type ApolloContext = {
+  res: Response,
+  req: Request
+}
+declare module "express-session" {
+  interface SessionData {
+      userId: any
+  }
 }
