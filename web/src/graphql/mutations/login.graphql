@@ -1,0 +1,5 @@
+mutation Login($credential: Credential!) {
+  login(credential: $credential) {
+    ...RegularUserResponse
+  }
+}

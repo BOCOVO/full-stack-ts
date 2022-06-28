@@ -11,9 +11,11 @@ export const Wrapper: FC<IWrapperProps> = ({
 }) => {
   return (
     <Box
+      p={{base:10,md:0}}
       mt={8}
       mx="auto"
-      maxW={variant === "regular" ? "800px" : "400px"}
+      my='auto'
+      maxW={variant === "regular" ? "850px" : "450px"}
       w="full"
     >
       {children}

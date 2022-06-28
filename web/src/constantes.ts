@@ -1,0 +1,1 @@
+export const RANDOM_MOVIE_POSTER = "https://api.lorem.space/image/movie?w=1500&h=1800" 
