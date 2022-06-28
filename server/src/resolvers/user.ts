@@ -39,7 +39,7 @@ export class userResolver {
     }
   }
 
-  @Query(() => UserResponse)
+  @Mutation(() => UserResponse)
   async login(
     @Arg("credential") credential: Credential,
     @Ctx() {req}:ApolloContext
