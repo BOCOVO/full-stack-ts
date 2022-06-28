@@ -58,9 +58,6 @@ export class Credential {
   @Field(() => String)
   password: string
 }
-interface Session {
-  userId:string
-}
 
 export type ApolloContext = {
   res: Response,
