@@ -3,8 +3,6 @@ import express from "express";
 import cors from "cors";
 import { ApolloServer } from "apollo-server-express";
 
-process.env.NODE_ENV = "development";
-
 import config from "./constants";
 import { createSchema } from "./utils/createSchema";
 import AppDataSource from "./datasource";
