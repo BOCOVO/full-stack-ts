@@ -11,7 +11,7 @@ const User: NextPage = () => {
   const [{ data, error, fetching }] = useGetByUsernameQuery({
     variables: { username },
   });
-  const email = data?.getByUsername?.email;
+  
   const firstname = data?.getByUsername?.firstname;
   const lastname = data?.getByUsername?.lastname;
 
