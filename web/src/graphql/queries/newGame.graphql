@@ -1,0 +1,12 @@
+query NewGame($level: Float!) {
+  newGame(level: $level) {
+  questions {
+    _id,
+    actor,
+    actor_image,
+    movie,
+    poster,
+  }
+  error
+  }
+}

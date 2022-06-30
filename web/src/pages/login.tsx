@@ -33,7 +33,7 @@ const Login: NextPage<ILoginProps> = () => {
             if (errors?.[0]) {
               setErrors(arrayToKeyValueObject<FieldError>(errors, "field", "message"))
             } else if (user) {
-              router.push(`user/${user.username}`);
+              router.push(`play`);
             }
 
           }}
@@ -45,6 +45,7 @@ const Login: NextPage<ILoginProps> = () => {
                 placeholder="username"
                 label="Username or Email"
                 min={3}
+                autoComplete="username"
                 required
               />
               <Box mt={4}>
@@ -61,7 +62,7 @@ const Login: NextPage<ILoginProps> = () => {
                 type="submit"
                 mt={4}
                 isLoading={isSubmitting}
-                colorScheme="blue"
+                colorScheme="orange"
               >
                 Login
               </Button>
@@ -83,4 +84,4 @@ const Login: NextPage<ILoginProps> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Login);
+export default withUrqlClient(createUrqlClient, { ssr: false, })(Login);

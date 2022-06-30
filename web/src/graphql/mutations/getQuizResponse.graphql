@@ -1,0 +1,6 @@
+mutation Check($checkId: String!) {
+  check(id: $checkId) {
+  result,
+  error  
+  }
+}

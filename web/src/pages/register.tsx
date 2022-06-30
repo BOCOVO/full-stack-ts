@@ -100,7 +100,7 @@ const Register: NextPage<IRegisterProps> = () => {
                 type="submit"
                 mt={4}
                 isLoading={isSubmitting}
-                colorScheme="blue"
+                colorScheme="orange"
               >
                 Register
               </Button>
@@ -121,5 +121,4 @@ const Register: NextPage<IRegisterProps> = () => {
     </SimpleGrid>
   );
 };
-
 export default withUrqlClient(createUrqlClient, { ssr: true })(Register);

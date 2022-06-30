@@ -26,10 +26,23 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type GameResponse = {
+  __typename?: 'GameResponse';
+  error?: Maybe<Scalars['String']>;
+  questions?: Maybe<Array<Quiz>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  check: SimpleResponse;
+  cleanUp: SimpleResponse;
   login: UserResponse;
   register: UserResponse;
+};
+
+
+export type MutationCheckArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -45,11 +58,34 @@ export type MutationRegisterArgs = {
 export type Query = {
   __typename?: 'Query';
   getByUsername?: Maybe<User>;
+  newGame: GameResponse;
 };
 
 
 export type QueryGetByUsernameArgs = {
   username: Scalars['String'];
+};
+
+
+export type QueryNewGameArgs = {
+  level: Scalars['Float'];
+};
+
+export type Quiz = {
+  __typename?: 'Quiz';
+  _id: Scalars['String'];
+  actor: Scalars['String'];
+  actor_image: Scalars['String'];
+  createdAt: Scalars['String'];
+  movie: Scalars['String'];
+  poster: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type SimpleResponse = {
+  __typename?: 'SimpleResponse';
+  error?: Maybe<Scalars['String']>;
+  result?: Maybe<Scalars['Boolean']>;
 };
 
 export type User = {
@@ -83,6 +119,18 @@ export type RegularUserFragment = { __typename?: 'User', id: number, email: stri
 
 export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: number, email: string, firstname: string, lastname: string, username: string, createdAt: string, updatedAt: string } | null };
 
+export type CleanUpMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CleanUpMutation = { __typename?: 'Mutation', cleanUp: { __typename?: 'SimpleResponse', error?: string | null, result?: boolean | null } };
+
+export type CheckMutationVariables = Exact<{
+  checkId: Scalars['String'];
+}>;
+
+
+export type CheckMutation = { __typename?: 'Mutation', check: { __typename?: 'SimpleResponse', result?: boolean | null, error?: string | null } };
+
 export type LoginMutationVariables = Exact<{
   credential: Credential;
 }>;
@@ -102,7 +150,14 @@ export type GetByUsernameQueryVariables = Exact<{
 }>;
 
 
-export type GetByUsernameQuery = { __typename?: 'Query', getByUsername?: { __typename?: 'User', id: number, username: string, email: string, createdAt: string, updatedAt: string } | null };
+export type GetByUsernameQuery = { __typename?: 'Query', getByUsername?: { __typename?: 'User', id: number, username: string, firstname: string, lastname: string, email: string, createdAt: string, updatedAt: string } | null };
+
+export type NewGameQueryVariables = Exact<{
+  level: Scalars['Float'];
+}>;
+
+
+export type NewGameQuery = { __typename?: 'Query', newGame: { __typename?: 'GameResponse', error?: string | null, questions?: Array<{ __typename?: 'Quiz', _id: string, actor: string, actor_image: string, movie: string, poster: string }> | null } };
 
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
@@ -132,6 +187,30 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
+export const CleanUpDocument = gql`
+    mutation CleanUp {
+  cleanUp {
+    error
+    result
+  }
+}
+    `;
+
+export function useCleanUpMutation() {
+  return Urql.useMutation<CleanUpMutation, CleanUpMutationVariables>(CleanUpDocument);
+};
+export const CheckDocument = gql`
+    mutation Check($checkId: String!) {
+  check(id: $checkId) {
+    result
+    error
+  }
+}
+    `;
+
+export function useCheckMutation() {
+  return Urql.useMutation<CheckMutation, CheckMutationVariables>(CheckDocument);
+};
 export const LoginDocument = gql`
     mutation Login($credential: Credential!) {
   login(credential: $credential) {
@@ -159,6 +238,8 @@ export const GetByUsernameDocument = gql`
   getByUsername(username: $username) {
     id
     username
+    firstname
+    lastname
     email
     createdAt
     updatedAt
@@ -168,4 +249,22 @@ export const GetByUsernameDocument = gql`
 
 export function useGetByUsernameQuery(options: Omit<Urql.UseQueryArgs<GetByUsernameQueryVariables>, 'query'>) {
   return Urql.useQuery<GetByUsernameQuery>({ query: GetByUsernameDocument, ...options });
+};
+export const NewGameDocument = gql`
+    query NewGame($level: Float!) {
+  newGame(level: $level) {
+    questions {
+      _id
+      actor
+      actor_image
+      movie
+      poster
+    }
+    error
+  }
+}
+    `;
+
+export function useNewGameQuery(options: Omit<Urql.UseQueryArgs<NewGameQueryVariables>, 'query'>) {
+  return Urql.useQuery<NewGameQuery>({ query: NewGameDocument, ...options });
 };
