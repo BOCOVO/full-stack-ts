@@ -9,7 +9,7 @@ import AppDataSource from "./datasource";
 
 import { createClient } from "redis"
 import expressSession from "express-session"
-import RedisStore from "connect-redis"
+import RedisStore from "connect-redis" 
 import constants from "./constants";
 import { ApolloContext } from "./types";
 
@@ -36,7 +36,7 @@ const main = async () => {
 
   //set up cors with express cors middleware
   app.use(
-    cors({ origin: [config.frontend_url, config.studio_apollo_graphql_url] })
+    cors({ origin: [config.frontend_url, config.studio_apollo_graphql_url]  , credentials:true })
   );
 
   // setting session
@@ -51,9 +51,9 @@ const main = async () => {
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 30, // a month
-      httpOnly: true,
+      httpOnly: constants.__prod__, // only hide on production
       sameSite: "lax",
-      secure: constants.__prod__
+      secure: constants.__prod__,    
     }
   }))
 

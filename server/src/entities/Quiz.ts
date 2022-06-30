@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from "type-graphql";
+import { ObjectType, Field } from "type-graphql";
 import {
   BaseEntity,
   PrimaryGeneratedColumn,
@@ -6,38 +6,40 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
+  ManyToOne,
 } from "typeorm";
 import { Game } from "./Game";
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
-  @Field(() => Int)
+export class Quiz extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field(() => String)
-  @Column({ unique: true })
-  username!: string;
-
-  @Field(() => String)
-  @Column({ unique: true })
-  email!: string;
+  _id: string;
 
   @Field(() => String)
   @Column()
-  firstname!: string;
+  movie!: string;
 
   @Field(() => String)
   @Column()
-  lastname!: string;
+  actor!: string;
+
+  @Field(() => String)
+  @Column()
+  poster!: string;
+
+  @Field(() => String)
+  @Column()
+  actor_image!: string;
 
   @Column()
-  password!: string;
+  response!: boolean; 
 
-  @OneToOne(() => Game, (game) => game.user)
-  game: Game
+  @ManyToOne(() => Game, (game) => game.quizs,{onDelete:"CASCADE"})
+  game!: Game;
 
   @Field(() => String)
   @CreateDateColumn()

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { InputType, Field, ObjectType } from "type-graphql";
+import { Quiz } from "./entities/Quiz";
 import { User } from "./entities/User";
 
 @InputType()
@@ -65,6 +66,36 @@ export type ApolloContext = {
 }
 declare module "express-session" {
   interface SessionData {
-      userId: any
+    userId: any
   }
+}
+
+export type MovieQuestion = {
+  movie: string,
+  actor: string,
+  poster: string,
+  actor_image: string,
+  response: boolean
+}
+
+export type StringKeyObject = {
+  [key: string]: string
+}
+
+@ObjectType()
+export class GameResponse {
+  @Field(() => [Quiz], { nullable: true })
+  questions?: Quiz[]
+
+  @Field(() => String, { nullable: true })
+  error?: string
+}
+
+@ObjectType()
+export class SimpleResponse{
+  @Field({ nullable: true })
+  result?: Boolean
+
+  @Field(() => String, { nullable: true })
+  error?: string
 }
