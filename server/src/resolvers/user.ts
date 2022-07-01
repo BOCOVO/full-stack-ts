@@ -22,6 +22,7 @@ export class userResolver {
         password: hashedPassword,
         ...rest
       }).save();
+      req.session.userId = user.id
       return { user };
 
     } catch (error) {
