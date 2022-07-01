@@ -8,7 +8,10 @@ import userValidator from "../utils/userValidator";
 export class userResolver {
 
   @Mutation(() => UserResponse)
-  async register(@Arg("input") input: UserInput): Promise<UserResponse | void> {
+  async register(
+    @Arg("input") input: UserInput,
+    @Ctx() { req }: ApolloContext
+  ): Promise<UserResponse | void> {
     // make validation
     const errors = userValidator(input)
     if (errors.length) {
@@ -43,7 +46,7 @@ export class userResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg("credential") credential: Credential,
-    @Ctx() {req}:ApolloContext
+    @Ctx() { req }: ApolloContext
   ): Promise<UserResponse | void> {
     const user = await User.findOne(
       credential.usernameOrEmail.includes("@")
@@ -72,7 +75,7 @@ export class userResolver {
       }
     }
     req.session.userId = user.id
-    return {user}
+    return { user }
   }
 
   @Query(() => User, { nullable: true })
