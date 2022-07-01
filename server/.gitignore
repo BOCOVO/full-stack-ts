@@ -2,6 +2,7 @@ dist
 
 .env.*
 !.env.exemple
+!.env.redis
 
 node_modules
 
