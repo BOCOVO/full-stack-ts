@@ -11,6 +11,13 @@ services:
     volumes:
       - ./server/dbdata:/var/lib/postgresql/data
 
+  starter-cache:
+    image: 'bitnami/redis:latest'
+    env_file:
+      - ./server/.env.redis
+    networks:
+      - starter-net
+
   starter-web:
     build: ./web
     container_name: starter-web
@@ -41,6 +48,7 @@ services:
       - starter-net
     depends_on:
       - starter-db
+      - starter-cache
     volumes:
       - ./server:/app
     command: /bin/sh "./entrypoint.sh"
