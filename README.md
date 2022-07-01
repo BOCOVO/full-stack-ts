@@ -1,9 +1,16 @@
 # ZeMovieQuiz
 
+
 A simple movie game created with a backend and a frontend designed with modern TypeScript tools.
 The main source code is provided by this [repository](https://github.com/Valentino-Houessou/typescript-fullstack-starter/tree/develop#docs)
 
-# Tools
+## Screenshots
+
+![Login screeshot](./img/sceen_1.png)
+![Register screeshot](./img/screen_2.png)
+![Playing screeshot](./img/screen_3.png)
+
+## Tools
 ### overall
 
 - [typescript](https://www.typescriptlang.org/)
