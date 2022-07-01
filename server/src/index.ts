@@ -7,7 +7,7 @@ import config from "./constants";
 import { createSchema } from "./utils/createSchema";
 import AppDataSource from "./datasource";
 
-import { createClient } from "redis"
+import { createClient, RedisClientOptions } from "redis"
 import expressSession from "express-session"
 import RedisStore from "connect-redis" 
 import constants from "./constants";
@@ -40,7 +40,12 @@ const main = async () => {
   );
 
   // setting session
-  const redisClient = createClient({ legacyMode: true })
+  const redisClientOption:RedisClientOptions = { legacyMode: true }
+  if(process.env.REDIS_URL){
+    // use url if provided
+    redisClientOption.url = process.env.REDIS_URL
+  }
+  const redisClient = createClient(redisClientOption)
   redisClient.connect().catch(err => console.log("Redis connection error: ",err))
   const sessionStore = new (RedisStore(expressSession))({ client: redisClient })
   app.use(expressSession({
@@ -50,7 +55,7 @@ const main = async () => {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 30, // a month
+      maxAge: 1000 * 60 * 60 * 24 * 30, // one month
       httpOnly: constants.__prod__, // only hide on production
       sameSite: "lax",
       secure: constants.__prod__,    
