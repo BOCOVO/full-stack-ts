@@ -33,7 +33,7 @@ services:
       - starter-server
     volumes:
       - ./web:/app
-    entrypoint: ["yarn", "dev"]
+    entrypoint: [ "yarn", "dev" ]
 
   starter-server:
     build: ./server
@@ -51,7 +51,8 @@ services:
       - starter-cache
     volumes:
       - ./server:/app
-    command: /bin/sh "./entrypoint.sh"
+      - /app/node_modules
+    entrypoint: [ "yarn", "dev" ]
 
 networks:
   starter-net:
