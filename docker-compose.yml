@@ -17,7 +17,7 @@ services:
       - ./server/.env.redis
     networks:
       - starter-net
-
+      
   starter-web:
     build: ./web
     container_name: starter-web

@@ -6,12 +6,21 @@ import { ApolloServer } from "apollo-server-express";
 import config from "./constants";
 import { createSchema } from "./utils/createSchema";
 import AppDataSource from "./datasource";
+import dotenv from "dotenv"
+import path from "path"
 
 import { createClient, RedisClientOptions } from "redis"
 import expressSession from "express-session"
 import RedisStore from "connect-redis" 
 import constants from "./constants";
 import { ApolloContext } from "./types";
+
+dotenv.config({
+  path: path.resolve(__dirname,
+      `../.env.${process.env.NODE_ENV || "development"}`
+  ),
+  debug: process.env.NODE_ENV === "development"
+})
 
 const main = async () => {
   let retries = Number(config.dbConnectionRetries);
@@ -45,7 +54,7 @@ const main = async () => {
     // use url if provided
     redisClientOption.url = process.env.REDIS_URL
   }
-  const redisClient = createClient(redisClientOption)
+  const redisClient = createClient()
   redisClient.connect().catch(err => console.log("Redis connection error: ",err))
   const sessionStore = new (RedisStore(expressSession))({ client: redisClient })
   app.use(expressSession({
