@@ -1,15 +1,7 @@
 import path from "path"
 import { DataSource } from "typeorm"
-import dotenv from "dotenv"
 
 import constants from "./constants"
-
-dotenv.config({
-    path: path.resolve(__dirname,
-        `../.env.${process.env.NODE_ENV || "development"}`
-    ),
-    debug: process.env.NODE_ENV === "development"
-})
 
 // app data source
 const AppDataSource = new DataSource({
