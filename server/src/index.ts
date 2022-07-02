@@ -49,10 +49,9 @@ const main = async () => {
   );
 
   // setting session
-  const redisClientOption:RedisClientOptions = { legacyMode: true }
-  if(process.env.REDIS_URL){
-    // use url if provided
-    redisClientOption.url = process.env.REDIS_URL
+  const redisClientOption:RedisClientOptions = { 
+    legacyMode: true ,
+    url:`redis://default:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:6379` 
   }
   const redisClient = createClient(redisClientOption)
   redisClient.connect().catch(err => console.log("Redis connection error: ",err))
