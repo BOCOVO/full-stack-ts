@@ -2,6 +2,15 @@ import "reflect-metadata";
 import express from "express";
 import cors from "cors";
 import { ApolloServer } from "apollo-server-express";
+import * as dotenv from "dotenv"
+import path from "path";
+
+dotenv.config({
+  path: path.resolve(__dirname,
+      `../.env.${process.env.NODE_ENV || "development"}`
+  ),
+  debug: process.env.NODE_ENV === "development"
+})
 
 import config from "./constants";
 import { createSchema } from "./utils/createSchema";
