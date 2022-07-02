@@ -1,26 +1,26 @@
 import "reflect-metadata";
-import express from "express";
-import cors from "cors";
-import { ApolloServer } from "apollo-server-express";
-
-import config from "./constants";
-import { createSchema } from "./utils/createSchema";
-import AppDataSource from "./datasource";
-import dotenv from "dotenv"
+import * as dotenv from "dotenv"
 import path from "path"
-
-import { createClient, RedisClientOptions } from "redis"
-import expressSession from "express-session"
-import RedisStore from "connect-redis" 
-import constants from "./constants";
-import { ApolloContext } from "./types";
-
 dotenv.config({
   path: path.resolve(__dirname,
       `../.env.${process.env.NODE_ENV || "development"}`
   ),
   debug: process.env.NODE_ENV === "development"
 })
+
+import express from "express";
+import cors from "cors";
+import { ApolloServer } from "apollo-server-express";
+
+import config from "./constants";
+import { createSchema } from "./utils/createSchema";
+import AppDataSource from "./datasource"
+
+import { createClient, RedisClientOptions } from "redis"
+import expressSession from "express-session"
+import RedisStore from "connect-redis" 
+import constants from "./constants";
+import { ApolloContext } from "./types";
 
 const main = async () => {
   let retries = Number(config.dbConnectionRetries);
@@ -49,12 +49,11 @@ const main = async () => {
   );
 
   // setting session
-  const redisClientOption:RedisClientOptions = { legacyMode: true }
-  if(process.env.REDIS_URL){
-    // use url if provided
-    redisClientOption.url = process.env.REDIS_URL
+  const redisClientOption:RedisClientOptions = { 
+    legacyMode: true ,
+    url:`redis://default:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:6379` 
   }
-  const redisClient = createClient()
+  const redisClient = createClient(redisClientOption)
   redisClient.connect().catch(err => console.log("Redis connection error: ",err))
   const sessionStore = new (RedisStore(expressSession))({ client: redisClient })
   app.use(expressSession({

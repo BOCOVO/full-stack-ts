@@ -17,7 +17,7 @@ services:
       - ./server/.env.redis
     networks:
       - starter-net
-      
+
   starter-web:
     build: ./web
     container_name: starter-web
@@ -51,7 +51,7 @@ services:
       - starter-cache
     volumes:
       - ./server:/app
-    command: /bin/sh "./entrypoint.sh"
-
+      - /app/node_modules
+    entrypoint: ["yarn", "dev"]
 networks:
   starter-net:

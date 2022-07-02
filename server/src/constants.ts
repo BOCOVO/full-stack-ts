@@ -1,6 +1,4 @@
-import { resolve } from "path";
-
-// the number of page to use to build a game
+//the number of page to use to build a game
 export const GAME_LEVEL_MOVIE_PAGE_COUNT = 1
 // the number of quiz in a game session
 export const QUIZ_PER_GAME = 10
