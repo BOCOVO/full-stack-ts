@@ -63,11 +63,11 @@ The environment variables in `.env.database` is used to create Postgre Database,
 | `POSTGRES_USER` | `DB_USER`
 | `POSTGRES_PASSWORD` | `DB_PASSWORD`
 
-The `DB_HOST` variable in `.env.developement` file must be the name of postgree container in  `docker-compose.yml` file at the root directory of the project. The default value is `starter-db`.
+The `DB_HOST` variable in `.env.developement` file must be the name of postgree service in  `docker-compose.yml` file at the root directory of the project. The default value is `starter-db`.
 
 The `.env.redis` file contain environment variables for the redis server. Make sure the variable `REDIS_PASSWORD` in `.env.redis` file have the same value with the variable `REDIS_PASSWORD` in `.env.development`
 
-The `REDIS_HOST` variable in `.env.development` file must be the name of the redis container in `docker-compose.yml` file at the root directory of the project. The default value is `starter-cache`.
+The `REDIS_HOST` variable in `.env.development` file must be the name of redis service in `docker-compose.yml` file at the root directory of the project. The default value is `starter-cache`.
 
 ### Web
 
