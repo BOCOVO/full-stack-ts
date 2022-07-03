@@ -30,6 +30,7 @@ const Register: NextPage<IRegisterProps> = () => {
               setErrors({
                 password_confirmation: "must be the same with password field"
               })
+              return
             }
 
             const response = await register({ input: values });
